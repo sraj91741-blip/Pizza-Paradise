@@ -1,688 +1,320 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Hub</title>
 
-<title>Pizza Hut - Online Pizza Store</title>
-
-<!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-<!-- AOS CSS -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#fffaf2;scroll-behavior:smooth}
+.page-radio{position:absolute;opacity:0;pointer-events:none}
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    scroll-behavior:smooth;
+.navbar{background:#171717;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000}
+.logo{color:#ffcc00;font-size:27px;font-weight:bold}
+.nav-links{display:flex;gap:25px;align-items:center}
+.nav-links label{color:white;cursor:pointer;font-weight:bold;margin:0}
+.nav-links label:hover{color:#ffcc00}
+.menu-icon{display:none;color:white;font-size:28px;cursor:pointer}
+.pages{min-height:70vh}
+.page{display:none;animation:fadeIn .7s ease}
+#homeTab:checked ~ .pages #homePage,
+#menuTab:checked ~ .pages #menuPage,
+#galleryTab:checked ~ .pages #galleryPage,
+#offersTab:checked ~ .pages #offersPage,
+#aboutTab:checked ~ .pages #aboutPage,
+#contactTab:checked ~ .pages #contactPage{display:block}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}
 }
 
-body{
-    font-family:Arial,sans-serif;
-    background:#fffaf5;
+.hero{height:550px;position:relative;overflow:hidden;background:#222}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:slideshow 15s infinite}
+.slide:nth-child(1){background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600');animation-delay:0s}
+.slide:nth-child(2){background-image:url('https://images.unsplash.com/photo-1579751626657-72bc17010498?w=1600');animation-delay:5s}
+.slide:nth-child(3){background-image:url('https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=1600');animation-delay:10s}
+@keyframes slideshow{
+0%{opacity:0;transform:scale(1)}
+8%{opacity:1}
+30%{opacity:1;transform:scale(1.1)}
+38%{opacity:0}
+100%{opacity:0}
 }
+.hero-content{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:white;padding:20px}
+.hero-content h1{font-size:55px;font-weight:bold;color:#ffcc00}
+.hero-content p{font-size:20px}
+.main-btn{background:#e31825;color:white;padding:12px 30px;border:0;border-radius:5px;font-weight:bold;text-decoration:none;cursor:pointer}
+.main-btn:hover{background:#ffcc00;color:#222}
 
-/* NAVBAR */
-
-.navbar{
-    background:#b5121b;
-    padding:15px 0;
+.section-title{text-align:center;font-size:35px;font-weight:bold;color:#b5121b;margin:45px 0 30px}
+.pizza-card{border:0;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px #0002;transition:.4s;background:white;height:100%}
+.pizza-card:hover{transform:translateY(-10px)}
+.pizza-card img{width:100%;height:220px;object-fit:cover}
+.pizza-card .card-body{text-align:center;padding:20px}
+.price{color:#b5121b;font-size:22px;font-weight:bold}
+.content-section{padding:40px 5%}
+.gallery-img{width:100%;height:230px;object-fit:cover;border-radius:12px;transition:.5s;animation:galleryIn 1s ease both}
+.gallery-img:hover{transform:scale(1.06)}
+@keyframes galleryIn{
+from{opacity:0;transform:translateY(35px)}
+to{opacity:1;transform:translateY(0)}
 }
+.offer-card{background:#fff;border-radius:12px;padding:30px;text-align:center;box-shadow:0 4px 15px #0002;height:100%;border-bottom:5px solid #e31825}
+.offer-card h3{color:#b5121b;font-weight:bold}
+.about-box{background:white;padding:35px;border-radius:12px;box-shadow:0 4px 15px #0002}
+.contact-box{background:white;padding:30px;border-radius:12px;box-shadow:0 4px 15px #0002}
+.form-control{padding:12px;margin-bottom:15px}
 
-.navbar-brand{
-    font-size:28px;
-    font-weight:bold;
-    color:white !important;
-}
-
-.navbar-nav .nav-link{
-    color:white !important;
-    font-size:16px;
-    margin:0 8px;
-    font-weight:600;
-}
-
-.navbar-nav .nav-link:hover{
-    color:#ffd54f !important;
-}
-
-.navbar-toggler{
-    border:1px solid white;
-}
-
-.navbar-toggler-icon{
-    filter:brightness(0) invert(1);
-}
-
-/* HOME */
-
-.hero{
-    min-height:600px;
-    display:flex;
-    align-items:center;
-    background:
-    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url("https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600");
-    background-position:center;
-    background-size:cover;
-    color:white;
-    text-align:center;
-}
-
-.hero h1{
-    font-size:65px;
-    font-weight:bold;
-}
-
-.hero p{
-    font-size:22px;
-}
-
-.btn-pizza{
-    background:#e31837;
-    color:white;
-    padding:13px 30px;
-    border-radius:30px;
-    border:none;
-    font-weight:bold;
-}
-
-.btn-pizza:hover{
-    background:#ffb300;
-    color:black;
-}
-
-/* SECTION */
-
-.section-title{
-    text-align:center;
-    font-size:38px;
-    font-weight:bold;
-    color:#b5121b;
-    margin-bottom:40px;
-}
-
-/* MENU */
-
-.pizza-card{
-    background:white;
-    border-radius:15px;
-    overflow:hidden;
-    box-shadow:0 4px 15px rgba(0,0,0,.12);
-    transition:.3s;
-    height:100%;
-}
-
-.pizza-card:hover{
-    transform:translateY(-8px);
-}
-
-.pizza-card img{
-    width:100%;
-    height:220px;
-    object-fit:cover;
-}
-
-.pizza-card .card-body{
-    padding:20px;
-    text-align:center;
-}
-
-.price{
-    color:#e31837;
-    font-size:22px;
-    font-weight:bold;
-}
-
-/* OFFERS */
-
-.offer-section{
-    background:#b5121b;
-    color:white;
-    padding:60px 20px;
-    text-align:center;
-}
-
-.offer-box{
-    background:white;
-    color:#222;
-    padding:30px 20px;
-    border-radius:15px;
-    height:100%;
-}
-
-.offer-box h3{
-    color:#b5121b;
-    font-weight:bold;
-}
-
-/* GALLERY */
-
-.gallery-img{
-    width:100%;
-    height:250px;
-    object-fit:cover;
-    border-radius:15px;
-    transition:.4s;
-}
-
-.gallery-img:hover{
-    transform:scale(1.04);
-}
-
-/* ABOUT */
-
-.about-section{
-    background:#fff0e5;
-    padding:70px 20px;
-}
-
-.about-section img{
-    width:100%;
-    height:350px;
-    object-fit:cover;
-    border-radius:15px;
-}
-
-/* CONTACT */
-
-.contact-section{
-    padding:60px 20px;
-}
-
-.contact-box{
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 4px 15px rgba(0,0,0,.1);
-}
-
-/* FOOTER */
-
-footer{
-    background:#171717;
-    color:white;
-    padding:45px 20px 20px;
-}
-
-footer h3{
-    color:#ffb300;
-}
-
-.social-icons a{
-    display:inline-block;
-    color:white;
-    font-size:25px;
-    margin:10px;
-    transition:.3s;
-}
-
-.social-icons a:hover{
-    color:#ffb300;
-}
-
-footer a{
-    color:white;
-    text-decoration:none;
-}
-
-footer a:hover{
-    color:#ffb300;
-}
-
-footer hr{
-    border-color:#777;
-}
-
-/* MOBILE RESPONSIVE */
+footer{background:#171717;color:white;padding:45px 6% 20px;margin-top:40px}
+footer h4{color:#ffcc00;margin-bottom:18px}
+footer p,footer li{color:#ddd;line-height:1.8}
+footer ul{list-style:none;padding:0}
+footer li{margin-bottom:5px}
+footer label{cursor:pointer}
+footer label:hover{color:#ffcc00}
+.map{width:100%;height:180px;border:0;border-radius:8px}
+.social-icons{display:flex;gap:15px;margin-top:18px}
+.social-icons a{width:45px;height:45px;display:flex;align-items:center;justify-content:center;background:#b5121b;color:white;border-radius:50%;transition:.3s;text-decoration:none}
+.social-icons a:hover{background:#ffcc00;color:#222;transform:translateY(-5px)}
+.social-icons svg{width:23px;height:23px;fill:currentColor}
+.copyright{border-top:1px solid #555;text-align:center;padding-top:18px;margin-top:30px;color:#ccc}
 
 @media(max-width:768px){
-
-    .hero{
-        min-height:450px;
-    }
-
-    .hero h1{
-        font-size:38px;
-    }
-
-    .hero p{
-        font-size:17px;
-    }
-
-    .section-title{
-        font-size:29px;
-    }
-
-    .gallery-img{
-        height:220px;
-    }
-
-    .about-section img{
-        height:250px;
-        margin-bottom:20px;
-    }
-
-    .navbar-brand{
-        font-size:23px;
-    }
-
+.navbar{flex-wrap:wrap}
+.menu-icon{display:block}
+.nav-links{display:none;flex-direction:column;width:100%;align-items:flex-start;padding-top:20px;gap:18px}
+#nav-toggle:checked ~ .nav-links{display:flex}
+.hero{height:420px}
+.hero-content h1{font-size:35px}
+.hero-content p{font-size:16px}
+.section-title{font-size:28px}
 }
-
-@media(max-width:400px){
-
-    .hero h1{
-        font-size:32px;
-    }
-
-    .hero p{
-        font-size:15px;
-    }
-
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<input type="radio" name="page" id="homeTab" class="page-radio" checked>
+<input type="radio" name="page" id="menuTab" class="page-radio">
+<input type="radio" name="page" id="galleryTab" class="page-radio">
+<input type="radio" name="page" id="offersTab" class="page-radio">
+<input type="radio" name="page" id="aboutTab" class="page-radio">
+<input type="radio" name="page" id="contactTab" class="page-radio">
 
-<nav class="navbar navbar-expand-lg sticky-top">
-<div class="container">
+<nav class="navbar">
+<div class="logo">🍕 PIZZA HUB</div>
 
-<a class="navbar-brand" href="#home">
-<i class="bi bi-pizza"></i> PIZZA HUT
-</a>
+<input type="checkbox" id="nav-toggle" class="page-radio">
+<label for="nav-toggle" class="menu-icon">☰</label>
 
-<button class="navbar-toggler" type="button"
-data-bs-toggle="collapse" data-bs-target="#navbarMenu"
-aria-controls="navbarMenu" aria-expanded="false"
-aria-label="Toggle navigation">
-
-<span class="navbar-toggler-icon"></span>
-</button>
-
-<div class="collapse navbar-collapse" id="navbarMenu">
-
-<ul class="navbar-nav ms-auto">
-
-<li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-<li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
-<li class="nav-item"><a class="nav-link" href="#offers">Offers</a></li>
-<li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
-<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-
-</ul>
-</div>
+<div class="nav-links">
+<label for="homeTab">Home</label>
+<label for="menuTab">Menu</label>
+<label for="galleryTab">Gallery</label>
+<label for="offersTab">Offers</label>
+<label for="aboutTab">About</label>
+<label for="contactTab">Contact</label>
 </div>
 </nav>
 
-<!-- HOME -->
+<div class="pages">
 
-<section class="hero" id="home">
+<!-- HOME PAGE -->
+<section class="page" id="homePage">
+<div class="hero">
+<div class="slide"></div>
+<div class="slide"></div>
+<div class="slide"></div>
+<div class="hero-content">
+<h1>Welcome to Pizza Hub</h1>
+<p>Fresh, Hot & Delicious Pizza Every Day!</p>
+<label for="menuTab" class="main-btn">Explore Our Menu</label>
+</div>
+</div>
 
-<div class="container">
+<div class="container py-4">
+<h2 class="section-title">Our Special Pizzas</h2>
+<div class="row g-4">
+<div class="col-md-4">
+<div class="pizza-card">
+<img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700" alt="Cheese pizza">
+<div class="card-body"><h4>Cheese Pizza</h4><p>Delicious cheesy pizza.</p><p class="price">₹199</p></div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="pizza-card">
+<img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=700" alt="Veg pizza">
+<div class="card-body"><h4>Veg Pizza</h4><p>Fresh vegetable toppings.</p><p class="price">₹299</p></div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="pizza-card">
+<img src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=700" alt="Italian pizza">
+<div class="card-body"><h4>Italian Pizza</h4><p>Classic Italian taste.</p><p class="price">₹349</p></div>
+</div>
+</div>
+</div>
+</div>
 
-<h1 data-aos="fade-up">HOT & FRESH PIZZA</h1>
-
-<p data-aos="fade-up" data-aos-delay="200">
-Delicious Pizza Made With Love!
-</p>
-
-<a href="#menu" class="btn btn-pizza mt-3"
-data-aos="zoom-in" data-aos-delay="400">
-ORDER NOW
-</a>
-
+<div class="container pb-5">
+<h2 class="section-title">Why Choose Pizza Hub?</h2>
+<div class="row text-center g-4">
+<div class="col-md-4"><h3>🍕 Fresh Food</h3><p>Freshly prepared pizzas.</p></div>
+<div class="col-md-4"><h3>🚚 Fast Service</h3><p>Quick and friendly service.</p></div>
+<div class="col-md-4"><h3>⭐ Best Taste</h3><p>Delicious food for everyone.</p></div>
+</div>
 </div>
 </section>
 
-<!-- MENU -->
-
-<section class="container py-5" id="menu">
-
-<h2 class="section-title">OUR POPULAR PIZZAS</h2>
-
+<!-- MENU PAGE -->
+<section class="page" id="menuPage">
+<div class="container py-4">
+<h2 class="section-title">Our Pizza Menu</h2>
 <div class="row g-4">
 
-<div class="col-lg-3 col-md-6 col-12">
-<div class="pizza-card">
-<img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=600" alt="Margherita Pizza">
-<div class="card-body">
-<h4>Margherita Pizza</h4>
-<p>Fresh cheese and tomato sauce.</p>
-<p class="price">₹199</p>
-<a href="#contact" class="btn btn-pizza">Order Now</a>
-</div>
-</div>
-</div>
+<div class="col-md-4"><div class="pizza-card"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700" alt="Margherita"><div class="card-body"><h4>Margherita Pizza</h4><p>Classic cheese pizza.</p><p class="price">₹199</p></div></div></div>
 
-<div class="col-lg-3 col-md-6 col-12">
-<div class="pizza-card">
-<img src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=600" alt="Cheese Pizza">
-<div class="card-body">
-<h4>Cheese Pizza</h4>
-<p>Extra cheese and delicious toppings.</p>
-<p class="price">₹249</p>
-<a href="#contact" class="btn btn-pizza">Order Now</a>
-</div>
-</div>
-</div>
+<div class="col-md-4"><div class="pizza-card"><img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=700" alt="Farmhouse"><div class="card-body"><h4>Farmhouse Pizza</h4><p>Fresh vegetable toppings.</p><p class="price">₹299</p></div></div></div>
 
-<div class="col-lg-3 col-md-6 col-12">
-<div class="pizza-card">
-<img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=600" alt="Veg Pizza">
-<div class="card-body">
-<h4>Veg Supreme</h4>
-<p>Fresh vegetables and special sauce.</p>
-<p class="price">₹299</p>
-<a href="#contact" class="btn btn-pizza">Order Now</a>
-</div>
-</div>
-</div>
+<div class="col-md-4"><div class="pizza-card"><img src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=700" alt="Paneer"><div class="card-body"><h4>Paneer Pizza</h4><p>Paneer with tasty toppings.</p><p class="price">₹279</p></div></div></div>
 
-<div class="col-lg-3 col-md-6 col-12">
-<div class="pizza-card">
-<img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600" alt="Paneer Pizza">
-<div class="card-body">
-<h4>Paneer Pizza</h4>
-<p>Delicious paneer and cheese toppings.</p>
-<p class="price">₹349</p>
-<a href="#contact" class="btn btn-pizza">Order Now</a>
-</div>
-</div>
-</div>
+<div class="col-md-4"><div class="pizza-card"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700" alt="Cheese"><div class="card-body"><h4>Double Cheese Pizza</h4><p>Extra cheese and flavour.</p><p class="price">₹349</p></div></div></div>
 
+<div class="col-md-4"><div class="pizza-card"><img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=700" alt="Corn"><div class="card-body"><h4>Corn Pizza</h4><p>Sweet corn and cheese.</p><p class="price">₹249</p></div></div></div>
+
+<div class="col-md-4"><div class="pizza-card"><img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=700" alt="Special"><div class="card-body"><h4>Special Pizza</h4><p>Our signature pizza.</p><p class="price">₹399</p></div></div></div>
+
+</div>
 </div>
 </section>
 
-<!-- OFFERS -->
-
-<section class="offer-section" id="offers">
-
-<div class="container">
-
-<h2 class="section-title text-white">SPECIAL OFFERS</h2>
-
+<!-- GALLERY PAGE -->
+<section class="page" id="galleryPage">
+<div class="container py-4">
+<h2 class="section-title">Our Pizza Gallery</h2>
 <div class="row g-4">
-
-<div class="col-md-6">
-<div class="offer-box">
-<h3>WEDNESDAY OFFER</h3>
-<h2>Buy 1 Get 1 FREE</h2>
-<p>Enjoy your favourite pizza with your friends!</p>
-<a href="#contact" class="btn btn-pizza">Grab Offer</a>
-</div>
-</div>
-
-<div class="col-md-6">
-<div class="offer-box">
-<h3>FRIDAY OFFER</h3>
-<h2>30% OFF</h2>
-<p>Get 30% discount on selected pizzas!</p>
-<a href="#contact" class="btn btn-pizza">Grab Offer</a>
-</div>
-</div>
-
+<div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700" alt="Pizza gallery 1"></div>
+<div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=700" alt="Pizza gallery 2"></div>
+<div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=700" alt="Pizza gallery 3"></div>
+<div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700" alt="Pizza gallery 4"></div>
+<div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=700" alt="Pizza gallery 5"></div>
+<div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=700" alt="Pizza gallery 6"></div>
 </div>
 </div>
 </section>
 
-<!-- GALLERY WITH AOS ANIMATION -->
-
-<section class="container py-5" id="gallery">
-
-<h2 class="section-title">OUR PIZZA GALLERY</h2>
-
+<!-- OFFERS PAGE -->
+<section class="page" id="offersPage">
+<div class="container py-4">
+<h2 class="section-title">Special Offers</h2>
 <div class="row g-4">
-
-<div class="col-lg-4 col-md-6 col-12"
-data-aos="fade-up">
-<img class="gallery-img"
-src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700"
-alt="Fresh pizza">
-</div>
-
-<div class="col-lg-4 col-md-6 col-12"
-data-aos="fade-up" data-aos-delay="100">
-<img class="gallery-img"
-src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=700"
-alt="Cheese pizza">
-</div>
-
-<div class="col-lg-4 col-md-6 col-12"
-data-aos="fade-up" data-aos-delay="200">
-<img class="gallery-img"
-src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=700"
-alt="Pizza slices">
-</div>
-
-<div class="col-lg-4 col-md-6 col-12"
-data-aos="zoom-in">
-<img class="gallery-img"
-src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=700"
-alt="Vegetable pizza">
-</div>
-
-<div class="col-lg-4 col-md-6 col-12"
-data-aos="zoom-in" data-aos-delay="100">
-<img class="gallery-img"
-src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=700"
-alt="Pizza preparation">
-</div>
-
-<div class="col-lg-4 col-md-6 col-12"
-data-aos="zoom-in" data-aos-delay="200">
-<img class="gallery-img"
-src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=700"
-alt="Delicious pizza">
-</div>
-
-</div>
-</section>
-
-<!-- ABOUT -->
-
-<section class="about-section" id="about">
-
-<div class="container">
-
-<div class="row align-items-center g-4">
-
-<div class="col-md-6">
-<img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?w=800"
-alt="Pizza restaurant">
-</div>
-
-<div class="col-md-6">
-
-<h2 class="section-title text-start">ABOUT PIZZA HUT</h2>
-
-<p>
-Welcome to Pizza Hut! We serve delicious and freshly
-prepared pizzas using quality ingredients.
-</p>
-
-<p>
-Our mission is to make every pizza experience special
-with great taste, quality and friendly service.
-</p>
-
-<a href="#contact" class="btn btn-pizza">Contact Us</a>
-
-</div>
+<div class="col-md-4"><div class="offer-card"><h3>Wednesday Offer</h3><h1>30% OFF</h1><p>Get 30% discount on selected pizzas every Wednesday.</p></div></div>
+<div class="col-md-4"><div class="offer-card"><h3>Friday Offer</h3><h1>BUY 1 GET 1</h1><p>Buy one selected pizza and get another one free every Friday.</p></div></div>
+<div class="col-md-4"><div class="offer-card"><h3>Family Combo</h3><h1>₹599</h1><p>Enjoy our special family pizza combo.</p></div></div>
 </div>
 </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ABOUT PAGE -->
+<section class="page" id="aboutPage">
+<div class="container py-5">
+<h2 class="section-title">About Pizza Hub</h2>
+<div class="about-box">
+<h3 class="text-danger mb-3">Welcome to Pizza Hub!</h3>
+<p>Pizza Hub is a pizza restaurant website created for pizza lovers. We serve delicious pizzas with fresh ingredients, tasty cheese and exciting toppings.</p>
+<p>Our goal is to provide a great food experience with a variety of pizza choices and special offers.</p>
+<h4>Our Mission</h4>
+<p>To make every pizza moment special with great taste and friendly service.</p>
+</div>
+</div>
+</section>
 
-<section class="contact-section" id="contact">
-
-<div class="container">
-
-<h2 class="section-title">CONTACT US</h2>
-
-<div class="row g-4">
-
-<div class="col-md-6">
-
+<!-- CONTACT PAGE -->
+<section class="page" id="contactPage">
+<div class="container py-5">
+<h2 class="section-title">Contact Us</h2>
+<div class="row justify-content-center">
+<div class="col-md-7">
 <div class="contact-box">
-
-<h3>Get In Touch</h3>
-
-<p><i class="bi bi-geo-alt-fill text-danger"></i>
-Pondicherry, India</p>
-
-<p><i class="bi bi-telephone-fill text-danger"></i>
-+91 98765 43210</p>
-
-<p><i class="bi bi-envelope-fill text-danger"></i>
-pizzahut@example.com</p>
-
-<p><i class="bi bi-clock-fill text-danger"></i>
-10:00 AM - 11:00 PM</p>
-
-</div>
-</div>
-
-<div class="col-md-6">
-
-<div class="contact-box">
-
-<h3>Send Your Message</h3>
-
 <form>
-
-<input type="text" class="form-control mb-3"
-placeholder="Your Name" required>
-
-<input type="email" class="form-control mb-3"
-placeholder="Your Email" required>
-
-<input type="tel" class="form-control mb-3"
-placeholder="Your Phone Number">
-
-<textarea class="form-control mb-3"
-rows="4" placeholder="Your Message"></textarea>
-
-<button type="submit" class="btn btn-pizza">
-Submit
-</button>
-
+<input type="text" class="form-control" placeholder="Your Name" required>
+<input type="email" class="form-control" placeholder="Your Email" required>
+<input type="tel" class="form-control" placeholder="Your Phone Number">
+<textarea class="form-control" rows="5" placeholder="Your Message"></textarea>
+<button type="button" class="main-btn">Submit</button>
 </form>
-
 </div>
 </div>
-
 </div>
-
-<!-- MAP -->
-
-<div class="mt-5">
-
-<h3 class="text-center mb-3">OUR LOCATION</h3>
-
-<iframe
-src="https://maps.google.com/maps?q=Pondicherry&t=&z=13&ie=UTF8&iwloc=&output=embed"
-width="100%"
-height="300"
-style="border:0;border-radius:15px;"
-loading="lazy">
-</iframe>
-
-</div>
-
 </div>
 </section>
+
+</div>
 
 <!-- FOOTER -->
-
 <footer>
-
-<div class="container">
-
 <div class="row g-4">
 
-<div class="col-md-4">
-
-<h3>PIZZA HUT</h3>
-
-<p>
-Enjoy fresh, delicious and tasty pizza
-with your family and friends.
-</p>
-
-</div>
-
-<div class="col-md-4">
-
-<h3>QUICK LINKS</h3>
-
-<p><a href="#home">Home</a></p>
-<p><a href="#menu">Menu</a></p>
-<p><a href="#offers">Offers</a></p>
-<p><a href="#gallery">Gallery</a></p>
-<p><a href="#contact">Contact</a></p>
-
-</div>
-
-<div class="col-md-4">
-
-<h3>FOLLOW US</h3>
+<div class="col-md-3">
+<h4>🍕 Pizza Hub</h4>
+<p>Fresh, hot and delicious pizzas made with love. Enjoy every bite with Pizza Hub!</p>
+<h4>Follow Us</h4>
 
 <div class="social-icons">
 
-<a href="https://www.facebook.com/" aria-label="Facebook">
-<i class="bi bi-facebook"></i>
+<a href="https://www.facebook.com/" target="_blank" aria-label="Facebook">
+<svg viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V10H7.3v3h2.8v8z"/></svg>
 </a>
 
-<a href="https://www.instagram.com/" aria-label="Instagram">
-<i class="bi bi-instagram"></i>
+<a href="https://www.instagram.com/" target="_blank" aria-label="Instagram">
+<svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-3a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>
 </a>
 
-<a href="https://www.whatsapp.com/" aria-label="WhatsApp">
-<i class="bi bi-whatsapp"></i>
+<a href="https://wa.me/919876543210" target="_blank" aria-label="WhatsApp">
+<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 0 1 12 4zm-3.3 3c-.2 0-.5.1-.7.4-.2.2-.9.9-.9 2.1s.9 2.4 1 2.5c.1.2 1.8 2.9 4.4 3.9 2.1.8 2.5.6 3 .5.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.5-.3l-1.7-.8c-.2-.1-.4-.1-.6.2l-.8 1c-.1.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-1.8c-.2-.4-.4-.4-.6-.4z"/></svg>
 </a>
-
-</div>
 
 </div>
 </div>
 
-<hr>
+<div class="col-md-3">
+<h4>Quick Links</h4>
+<ul>
+<li><label for="homeTab">Home</label></li>
+<li><label for="menuTab">Menu</label></li>
+<li><label for="galleryTab">Gallery</label></li>
+<li><label for="offersTab">Offers</label></li>
+<li><label for="aboutTab">About Us</label></li>
+<li><label for="contactTab">Contact</label></li>
+</ul>
+</div>
 
-<p class="text-center mb-0">
-© 2026 Pizza Hut. All Rights Reserved.
-</p>
+<div class="col-md-3">
+<h4>Contact Details</h4>
+<p>📍 Puducherry, India</p>
+<p>📞 +91 98765 43210</p>
+<p>✉️ pizzahub@example.com</p>
+<h4>Opening Hours</h4>
+<p>Monday - Sunday</p>
+<p>10:00 AM - 10:00 PM</p>
+</div>
 
+<div class="col-md-3">
+<h4>Our Location</h4>
+<iframe class="map" src="https://www.google.com/maps?q=Providence%20Mall%20Puducherry&output=embed" loading="lazy" allowfullscreen></iframe>
+<p class="mt-2">Puducherry, India</p>
+</div>
+
+</div>
+
+<div class="copyright">
+<p>© 2026 Pizza Hub. All Rights Reserved.</p>
 </div>
 </footer>
 
-<!-- Bootstrap Bundle JS: required for mobile navbar -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- AOS Library -->
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-<!-- AOS Initialization -->
-<script>
-AOS.init({
-    duration:1000,
-    once:true,
-    offset:100
-});
-</script>
-
 </body>
-</html>
+    </html>
